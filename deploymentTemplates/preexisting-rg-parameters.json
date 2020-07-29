@@ -3,19 +3,19 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "appId": {
-            "value": ""
+            "value": "b6b1f992-5b98-4f50-8ffc-68968a7b7a03"
         },
         "appSecret": {
-            "value": ""
+            "value": "-gAGYFM5xheN03oHUblaHg_5_NG9b.E9f."
         },
         "botId": {
-            "value": ""
+            "value": "youtube-video-title"
         },
         "botSku": {
-            "value": ""
+            "value": "F0"
         },
         "newAppServicePlanName": {
-            "value": ""
+            "value": "youtube-video-title-service"
         },
         "newAppServicePlanSku": {
             "value": {
@@ -27,13 +27,13 @@
             }
         },
         "appServicePlanLocation": {
-            "value": ""
+            "value": "germanywestcentral"
         },
         "existingAppServicePlan": {
             "value": ""
         },
         "newWebAppName": {
-            "value": ""
+            "value": "youtube-video-title"
         }
     }
 }

@@ -9,23 +9,29 @@ class EchoBot extends ActivityHandler {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            try {
-                const text = context.activity.text;
-                const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([^&]+)";
-                const urls = text.match(new RegExp(rx, "ig"));
-                //console.log(JSON.stringify(urls));
-                if (urls && urls.length) {
-                    for (const url of urls) {
-                        const reply = await (await fetch(url)).text();
-                        const matched = reply.match(/<title>([^<]+)<[/]title>/);
-                        const replyText = (matched && matched.length && matched[1]) ?
-                            url + ": " + matched[1] :
-                            url + ": <can't find title>";
-                        await context.sendActivity(MessageFactory.text(replyText, replyText));
+            if (text.match(/good bot/i)) {
+                await context.sendActivity(MessageFactory.text("Good human", "Good human"));
+            } else if (text.match(/version/i)) {
+                await context.sendActivity(MessageFactory.text("0.0.1", "0.0.1"));
+            } else {
+                try {
+                    const text = context.activity.text;
+                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([^&]+)";
+                    const urls = text.match(new RegExp(rx, "ig"));
+                    //console.log(JSON.stringify(urls));
+                    if (urls && urls.length) {
+                        for (const url of urls) {
+                            const reply = await (await fetch(url)).text();
+                            const matched = reply.match(/<title>([^<]+)<[/]title>/);
+                            const replyText = (matched && matched.length && matched[1]) ?
+                                url + ": " + matched[1] :
+                                url + ": <can't find title>";
+                            await context.sendActivity(MessageFactory.text(replyText, replyText));
+                        }
                     }
+                } catch (err) {
+                    await context.sendActivity(MessageFactory.text(err.message, err.message));
                 }
-            } catch (err) {
-                await context.sendActivity(MessageFactory.text(err.message, err.message));
             }
             await next();
         });
