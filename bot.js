@@ -9,14 +9,21 @@ class EchoBot extends ActivityHandler {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
+            if (context.activity.from.role === "bot") {
+                next();
+                return;
+            }
             const text = context.activity.text;
+            //console.log(JSON.stringify(Object.keys(context.activity)));
+            //console.log(JSON.stringify(context.activity));
             if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
             } else if (text.match(/version/i)) {
-                await context.sendActivity(MessageFactory.text("0.0.2", "0.0.2"));
+                await context.sendActivity(MessageFactory.text("0.0.3", "0.0.3"));
             } else {
                 try {
-                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9]+)";
+                    // todo: support youtu.be
+                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
                     const urls = text.match(new RegExp(rx, "ig"));
                     //console.log(JSON.stringify(urls));
                     if (urls && urls.length) {
@@ -65,17 +72,17 @@ class EchoBot extends ActivityHandler {
             await next();
         });
 
-        this.onMembersAdded(async (context, next) => {
-            const membersAdded = context.activity.membersAdded;
-            const welcomeText = 'Hello and welcome!';
-            for (let cnt = 0; cnt < membersAdded.length; ++cnt) {
-                if (membersAdded[cnt].id !== context.activity.recipient.id) {
-                    await context.sendActivity(MessageFactory.text(welcomeText, welcomeText));
-                }
-            }
-            // By calling next() you ensure that the next BotHandler is run.
-            await next();
-        });
+//        this.onMembersAdded(async (context, next) => {
+//            const membersAdded = context.activity.membersAdded;
+//            const welcomeText = 'Hello and welcome!';
+//            for (let cnt = 0; cnt < membersAdded.length; ++cnt) {
+//                if (membersAdded[cnt].id !== context.activity.recipient.id) {
+//                    await context.sendActivity(MessageFactory.text(welcomeText, welcomeText));
+//                }
+//            }
+//            // By calling next() you ensure that the next BotHandler is run.
+//            await next();
+//        });
     }
 }
 
