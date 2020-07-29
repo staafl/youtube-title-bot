@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 const { ActivityHandler, MessageFactory } = require('botbuilder');
-const fetch = require('node-fetch');
+const http = require('https');
 
 class EchoBot extends ActivityHandler {
     constructor() {
@@ -13,16 +13,45 @@ class EchoBot extends ActivityHandler {
             if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
             } else if (text.match(/version/i)) {
-                await context.sendActivity(MessageFactory.text("0.0.1", "0.0.1"));
+                await context.sendActivity(MessageFactory.text("0.0.2", "0.0.2"));
             } else {
                 try {
-                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([^&]+)";
+                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9]+)";
                     const urls = text.match(new RegExp(rx, "ig"));
                     //console.log(JSON.stringify(urls));
                     if (urls && urls.length) {
                         for (const url of urls) {
-                            const reply = await (await fetch(url)).text();
+
+                            let reply = "";
+                            await new Promise((rs) => {
+                                var callback = function(res) {
+                                  //console.log(`STATUS: ${res.statusCode}`);
+                                  //console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+                                  res.setEncoding('utf8');
+                                  res.on('data', function (chunk) {
+                                    reply += chunk;
+                                    //console.log("chunk" + chunk)
+                                  });
+
+                                  res.on('end', function () {
+                                    //console.log('end');
+                                    rs();
+                                  });
+                                };
+
+                                const options = {
+                                    host: "www.youtube.com",
+                                    path: url.replace(/.*[.]com[/]/i, "/"),
+                                    headers: {
+                                      accept: "*/*",
+                                      ["user-agent"]: "curl"
+                                    }
+                                };
+                                //console.log(options);
+                                http.get(options, callback).end();
+                            });
                             const matched = reply.match(/<title>([^<]+)<[/]title>/);
+                            //console.log(reply);
                             const replyText = (matched && matched.length && matched[1]) ?
                                 url + ": " + matched[1] :
                                 url + ": <can't find title>";
