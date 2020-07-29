@@ -9,13 +9,13 @@ class EchoBot extends ActivityHandler {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
+            const text = context.activity.text;
             if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
             } else if (text.match(/version/i)) {
                 await context.sendActivity(MessageFactory.text("0.0.1", "0.0.1"));
             } else {
                 try {
-                    const text = context.activity.text;
                     const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([^&]+)";
                     const urls = text.match(new RegExp(rx, "ig"));
                     //console.log(JSON.stringify(urls));
