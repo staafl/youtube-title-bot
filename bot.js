@@ -26,14 +26,14 @@ class EchoBot extends ActivityHandler {
                 try {
                     // todo: support youtu.be
                     const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
-                    await context.sendActivity(MessageFactory.text("here", "here"));
+                    //await context.sendActivity(MessageFactory.text("here", "here"));
                     const urls = text.match(new RegExp(rx, "ig")) || text.match(/https?:[/][/]youtu[.]be[/]([a-zA-Z0-9_-]+)/ig);
                     //console.log(JSON.stringify(urls));
-                    await context.sendActivity(MessageFactory.text(JSON.stringify(urls), JSON.stringify(urls)));
+                    // await context.sendActivity(MessageFactory.text(JSON.stringify(urls), JSON.stringify(urls)));
                     if (urls && urls.length) {
                         for (const url_ of urls) {
                             const url = url_.replace(/https?:[/][/]youtu[.]be[/]/i, "https://www.youtube.com/watch?v=");
-                            await context.sendActivity(MessageFactory.text(url, url));
+                            //await context.sendActivity(MessageFactory.text(url, url));
                             //console.log(url);
                             let reply = "";
                             await new Promise((rs) => {
