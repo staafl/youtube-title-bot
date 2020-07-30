@@ -3,13 +3,15 @@
 
 const { ActivityHandler, MessageFactory } = require('botbuilder');
 const http = require('https');
+const pkg = require("./package.json");
 
 class EchoBot extends ActivityHandler {
     constructor() {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            if (context.activity.from.role === "bot") {
+            if (context.activity.from.role !== "user" ||
+                context.activity.recipient.role !== "bot") {
                 next();
                 return;
             }
@@ -19,7 +21,7 @@ class EchoBot extends ActivityHandler {
             if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
             } else if (text.match(/version/i)) {
-                await context.sendActivity(MessageFactory.text("0.0.3", "0.0.3"));
+                await context.sendActivity(MessageFactory.text(pkg.version, pkg.version));
             } else {
                 try {
                     // todo: support youtu.be
@@ -63,6 +65,7 @@ class EchoBot extends ActivityHandler {
                                 url + ": " + matched[1] :
                                 url + ": <can't find title>";
                             await context.sendActivity(MessageFactory.text(replyText, replyText));
+                            break;
                         }
                     }
                 } catch (err) {
