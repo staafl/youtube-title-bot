@@ -31,7 +31,8 @@ class EchoBot extends ActivityHandler {
                     if (urls && urls.length) {
                         for (const url_ of urls) {
                             const url = url_.replace(/https?:[/][/]youtu[.]be[/]/i, "https://www.youtube.com/watch?v=");
-                            console.log(url);
+                            await context.sendActivity(MessageFactory.text(url, url));
+                            //console.log(url);
                             let reply = "";
                             await new Promise((rs) => {
                                 var callback = function(res) {
