@@ -25,12 +25,13 @@ class EchoBot extends ActivityHandler {
             } else {
                 try {
                     // todo: support youtu.be
-                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
+                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)|https?://youtu[.]be[/].*";
                     const urls = text.match(new RegExp(rx, "ig"));
                     //console.log(JSON.stringify(urls));
                     if (urls && urls.length) {
-                        for (const url of urls) {
-
+                        for (const url_ of urls) {
+                            const url = url_.replace(/youtu[.]be[/]/i, "youtube.com/watch?v=");
+                            console.log(url);
                             let reply = "";
                             await new Promise((rs) => {
                                 var callback = function(res) {
