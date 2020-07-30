@@ -66,8 +66,8 @@ class EchoBot extends ActivityHandler {
                             const matched = reply.match(/<title>([^<]+)<[/]title>/);
                             //console.log(reply);
                             const replyText = (matched && matched.length && matched[1]) ?
-                                url + ": " + matched[1].replace(" - YouTube", "") :
-                                url + ": <can't find title>";
+                                url_ + ": " + matched[1].replace(" - YouTube", "") :
+                                url_ + ": <can't find title>";
                             await context.sendActivity(MessageFactory.text(replyText, replyText));
                             break;
                         }
