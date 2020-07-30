@@ -10,11 +10,11 @@ class EchoBot extends ActivityHandler {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            if (context.activity.from.role !== "user" ||
-                context.activity.recipient.role !== "bot") {
-                next();
-                return;
-            }
+//            if (context.activity.from.role !== "user" ||
+//                context.activity.recipient.role !== "bot") {
+//                next();
+//                return;
+//            }
             const text = context.activity.text;
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
@@ -62,11 +62,17 @@ class EchoBot extends ActivityHandler {
                             const matched = reply.match(/<title>([^<]+)<[/]title>/);
                             //console.log(reply);
                             const replyText = (matched && matched.length && matched[1]) ?
-                                url + ": " + matched[1] :
+                                url + ": " + matched[1].replace(" - YouTube", "") :
                                 url + ": <can't find title>";
                             await context.sendActivity(MessageFactory.text(replyText, replyText));
                             break;
                         }
+                    } else if (text.match(/\b(hi|hello)\b/i)) {
+                        await context.sendActivity(MessageFactory.text("Well hello there.", "Well hello there."));
+                    } else if (text.match(/who's (the best|the greatest|right)/i)) {
+                        await context.sendActivity(MessageFactory.text("Why, Velko, of course.", "Why, Velko, of course."));
+                    } else {
+                        await context.sendActivity(MessageFactory.text("What? Make sense, you creature.", "What? Make sense, you creature."));
                     }
                 } catch (err) {
                     await context.sendActivity(MessageFactory.text(err.message, err.message));
