@@ -30,7 +30,7 @@ class EchoBot extends ActivityHandler {
                     //console.log(JSON.stringify(urls));
                     if (urls && urls.length) {
                         for (const url_ of urls) {
-                            const url = url_.replace(/https?:[/][/]youtu[.]be[/]/i, "https://youtube.com/watch?v=");
+                            const url = url_.replace(/https?:[/][/]youtu[.]be[/]/i, "https://www.youtube.com/watch?v=");
                             console.log(url);
                             let reply = "";
                             await new Promise((rs) => {
