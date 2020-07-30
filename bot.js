@@ -25,7 +25,8 @@ class EchoBot extends ActivityHandler {
             } else {
                 try {
                     // todo: support youtu.be
-                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)|https?://youtu[.]be[/].*";
+                    const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)|https?:[/][/]youtu[.]be[/].*";
+                    await context.sendActivity(MessageFactory.text("here", "here"));
                     const urls = text.match(new RegExp(rx, "ig"));
                     //console.log(JSON.stringify(urls));
                     await context.sendActivity(MessageFactory.text(JSON.stringify(urls), JSON.stringify(urls)));
