@@ -28,6 +28,7 @@ class EchoBot extends ActivityHandler {
                     const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)|https?://youtu[.]be[/].*";
                     const urls = text.match(new RegExp(rx, "ig"));
                     //console.log(JSON.stringify(urls));
+                    await context.sendActivity(MessageFactory.text(JSON.stringify(urls), JSON.stringify(urls)));
                     if (urls && urls.length) {
                         for (const url_ of urls) {
                             const url = url_.replace(/https?:[/][/]youtu[.]be[/]/i, "https://www.youtube.com/watch?v=");
@@ -77,7 +78,7 @@ class EchoBot extends ActivityHandler {
                         await context.sendActivity(MessageFactory.text("What? Make sense, you creature.", "What? Make sense, you creature."));
                     }
                 } catch (err) {
-                    await context.sendActivity(MessageFactory.text(err.message, err.message));
+                    await context.sendActivity(MessageFactory.text("Error: " + err.message, "Error: " + err.message));
                 }
             }
             await next();
