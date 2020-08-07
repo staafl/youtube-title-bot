@@ -15,10 +15,12 @@ class EchoBot extends ActivityHandler {
 //                next();
 //                return;
 //            }
-            const text = context.activity.text;
+            const text = context.activity.text || "";
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
-            if (text.match(/good bot/i)) {
+            if (text.match(/(sarcastic|condescending) laugh/i)) {
+                await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
+            } else if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
             } else if (text.match(/version/i)) {
                 await context.sendActivity(MessageFactory.text(pkg.version, pkg.version));
