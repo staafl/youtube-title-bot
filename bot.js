@@ -5,6 +5,22 @@ const { ActivityHandler, MessageFactory } = require('botbuilder');
 const http = require('https');
 const pkg = require("./package.json");
 
+function safeStringify(obj, indent = 2) {
+  let cache = [];
+  const retVal = JSON.stringify(
+    obj,
+    (key, value) =>
+      typeof value === "object" && value !== null
+        ? cache.includes(value)
+          ? undefined // Duplicate reference found, discard key
+          : cache.push(value) && value // Store value in our collection
+        : value,
+    indent
+  );
+  cache = null;
+  return retVal;
+}
+
 class EchoBot extends ActivityHandler {
     constructor() {
         super();
@@ -20,6 +36,11 @@ class EchoBot extends ActivityHandler {
             //console.log(JSON.stringify(context.activity));
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
+            } else if (text.match(/^raw /) {
+                const str = safeStringify(context);
+                await context.sendActivity(MessageFactory.text(context, context));
+            } else if (text.match(/\b(fuck|ass|shit|stupid|moron|dumb|cunt|fool)/i)) {
+                await context.sendActivity(MessageFactory.text("Bite my shiny metal ass!", "Bite my shiny metal ass!"));
             } else if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
             } else if (text.match(/version/i)) {
