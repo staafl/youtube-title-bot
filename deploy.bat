@@ -1,7 +1,7 @@
 @echo off
 setlocal
-for /f %%x in ("dir /b *.js") do (
-    call node --check
+for /f %%x in ('dir /b *.js') do (
+    call node --check %%x
     if ERRORLEVEL 1 exit /b
 )
 del *.zip
