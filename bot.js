@@ -85,8 +85,10 @@ class EchoBot extends ActivityHandler {
                     });
 
                     const parsed = JSON.parse(result);
-                    const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
-                    await context.sendActivity(MessageFactory.text(toSend, toSend));
+                    //const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
+                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.ket+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
+                    const toSend2 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.ket+"): " + parsed.fields.summary + " (a: " + parsed.fields.assignee.displayName + ")";
+                    await context.sendActivity(MessageFactory.text(toSend1, toSend2));
                     handled = true;
                 }
             }
