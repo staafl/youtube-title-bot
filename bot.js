@@ -53,7 +53,7 @@ class EchoBot extends ActivityHandler {
 //                next();
 //                return;
 //            }
-            const text = context.activity.text || "";
+            const text = contexwt.activity.text || "";
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
@@ -66,7 +66,7 @@ class EchoBot extends ActivityHandler {
                     if (seen[ticket]) {
                         continue;
                     }
-                    seen[ticked] = true;
+                    seen[ticket] = true;
                     await context.sendActivity(MessageFactory.text(ticket, ticket));
                     const result = await request({
                         url: "https://jira.tick42.com/rest/api/2/issue/" + ticket + "?fields=assignee,summary",
