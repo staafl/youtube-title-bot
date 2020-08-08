@@ -1,6 +1,9 @@
 @echo off
 setlocal
-
+for /f %%x in ("dir /b *.js") do (
+    call node --check
+    if ERRORLEVEL 1 exit /b
+)
 del *.zip
 call git commit -am "deploy"
 call npm version patch

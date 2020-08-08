@@ -9,7 +9,7 @@ function safeStringify(obj, indent = 2) {
   let cache = [];
   const retVal = JSON.stringify(
     obj,
-    (key, value) =>
+    (key, value) =
       typeof value === "object" && value !== null
         ? cache.includes(value)
           ? undefined // Duplicate reference found, discard key
