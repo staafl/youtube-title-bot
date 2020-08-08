@@ -93,7 +93,7 @@ class EchoBot extends ActivityHandler {
                         fvString = ", fix versions: " + (parsed.fields.fixVersions.map(x => x.name).join(", "));
                     }
                     //const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
-                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", " + parsed.fields.status.name + fvString + ")";
+                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", status: " + parsed.fields.status.name + fvString + ")";
                     const toSend2 = toSend1;
                     await context.sendActivity(MessageFactory.text(toSend1, toSend2));
                     handled = true;
