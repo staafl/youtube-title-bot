@@ -34,6 +34,7 @@ class EchoBot extends ActivityHandler {
             const text = context.activity.text || "";
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
+            try {
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
             } else if (text.match(/^raw /)) {
@@ -46,7 +47,6 @@ class EchoBot extends ActivityHandler {
             } else if (text.match(/version/i)) {
                 await context.sendActivity(MessageFactory.text(pkg.version, pkg.version));
             } else {
-                try {
                     // todo: support youtu.be
                     const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
                     //await context.sendActivity(MessageFactory.text("here", "here"));
@@ -101,9 +101,10 @@ class EchoBot extends ActivityHandler {
                     } else {
                         await context.sendActivity(MessageFactory.text("What? Make sense, you creature.", "What? Make sense, you creature."));
                     }
-                } catch (err) {
-                    await context.sendActivity(MessageFactory.text("Error: " + err.message, "Error: " + err.message));
-                }
+                } 
+            }
+            catch (err) {
+                await context.sendActivity(MessageFactory.text("Error: " + err.message, "Error: " + err.message));
             }
             await next();
         });
