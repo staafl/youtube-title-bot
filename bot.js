@@ -53,25 +53,30 @@ class EchoBot extends ActivityHandler {
 //                next();
 //                return;
 //            }
-            const text = contexwt.activity.text || "";
+            const text = context.activity.text || "";
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
             let handled = false;
 
+            //console.log(context.activity.conversation.tenantId);
             if (context.activity.conversation &&
-                context.activity.conversation.tenantId === process.env.JiraTenantId) {
+                (!context.activity.conversation.tenantId ||
+                (process.env.JiraTenantId && context.activity.conversation.tenantId === process.env.JiraTenantId))) {
                 const seen = {};
                 for (const ticket of (text.match(/\b[A-Z][A-Z0-9_]+-[1-9][0-9]*\b/g) || [])) {
                     if (seen[ticket]) {
                         continue;
                     }
                     seen[ticket] = true;
-                    await context.sendActivity(MessageFactory.text(ticket, ticket));
+                    //await context.sendActivity(MessageFactory.text(ticket, ticket));
+                    const auth = Buffer.from(process.env.JiraUser + ":" + process.env.JiraPassword).toString("base64");
+                    //console.log(auth);
                     const result = await request({
-                        url: "https://jira.tick42.com/rest/api/2/issue/" + ticket + "?fields=assignee,summary",
+                        host: "jira.tick42.com",
+                        path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary",
                         headers: {
-                            "Authorization": "Basic " + Buffer.from(process.env.JiraUser + ":" + process.env.JiraPassword).toString("base64"),
+                            "Authorization": "Basic " + auth,
                             "Accept": "application/json"
                         }
                     });
