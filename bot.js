@@ -69,7 +69,7 @@ class EchoBot extends ActivityHandler {
                             "Accept": "application/json"
                         }
                     });
-                    await context.sendActivity(MessageFactory.text(result, result));
+                    await context.sendActivity(MessageFactory.text("Result: " + result, "Result: " + result));
                     handled = true;
                 }
             }
