@@ -25,10 +25,11 @@ function request(options) {
   let reply = "";
   return new Promise((rs, rj) => {
         var callback = function(res) {
-          //console.log(`STATUS: ${res.statusCode}`);
+          rs(`STATUS: ${res.statusCode}`);
           //console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
           res.setEncoding('utf8');
           res.on('data', function (chunk) {
+            //console.log(chunk);
             reply += chunk;
           });
           res.on('error', rj);
