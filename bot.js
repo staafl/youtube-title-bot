@@ -61,6 +61,7 @@ class EchoBot extends ActivityHandler {
             if (context.activity.conversation &&
                 context.activity.conversation.tenantId === process.env.JiraTenantId) {
                 for (const ticket of (text.match(/\b[A-Z][A-Z0-9_]+-[1-9][0-9]*\b/g) || [])) {
+                    await context.sendActivity(MessageFactory.text(ticket, ticket));
                     const result = await request({
                         url: "https://jira.tick42.com/rest/api/2/issue/" + ticket + "?fields=assignee,summary",
                         headers: {
