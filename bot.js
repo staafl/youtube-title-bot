@@ -78,7 +78,7 @@ class EchoBot extends ActivityHandler {
                     //console.log(auth);
                     const result = await request({
                         host: "jira.tick42.com",
-                        path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary,fixVersions",
+                        path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary,fixVersions,status",
                         headers: {
                             "Authorization": "Basic " + auth,
                             "Accept": "application/json"
@@ -87,8 +87,13 @@ class EchoBot extends ActivityHandler {
 
                     // await context.sendActivity(MessageFactory.text(result, result));
                     const parsed = JSON.parse(result);
+                    let fvString = "";
+                    if (parsed.fields.fixVersions &&
+                        parsed.fields.fixVersions.length) {
+                        fvString = ", fix versions: " + (parsed.fields.fixVersions.map(x => x.name).join(", "));
+                    }
                     //const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
-                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", "+ (parsed.fields.fixVersions.map(x => x.name).join(", "))+")";
+                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", " + parsed.fields.status + fvString + ")";
                     const toSend2 = toSend1;
                     await context.sendActivity(MessageFactory.text(toSend1, toSend2));
                     handled = true;
