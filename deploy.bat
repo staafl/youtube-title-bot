@@ -7,5 +7,6 @@ for /f %%x in ('dir /b *.js') do (
 del *.zip
 call git commit -am "deploy"
 call npm version patch
+call git push
 call 7z a youtube-title-bot.zip . -x!.git
 call az webapp deployment source config-zip --resource-group "default" --src "youtube-title-bot.zip" --name youtube-video-title
