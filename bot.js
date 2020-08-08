@@ -64,7 +64,7 @@ class EchoBot extends ActivityHandler {
                     const result = await request({
                         url: "https://jira.tick42.com/rest/api/2/issue/" + ticket + "?fields=assignee,summary",
                         headers: {
-                            "Authorization": "Basic " + btoa(process.env.JiraUser + ":" + process.env.JiraPassword),
+                            "Authorization": "Basic " + Buffer.from(process.env.JiraUser + ":" + process.env.JiraPassword).toString("base64"),
                             "Accept": "application/json"
                         }
                     });
