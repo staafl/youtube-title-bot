@@ -21,6 +21,27 @@ function safeStringify(obj, indent = 2) {
   return retVal;
 }
 
+function request(options) {
+  let reply = "";
+  return new Promise((rs, rj) => {
+        var callback = function(res) {
+          //console.log(`STATUS: ${res.statusCode}`);
+          //console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+          res.setEncoding('utf8');
+          res.on('data', function (chunk) {
+            reply += chunk;
+          });
+          res.on('error', rj);
+
+          res.on('end', function () {
+            rs(reply);
+          });
+        };
+
+        http.get(options, callback).end();
+    });
+}
+
 class EchoBot extends ActivityHandler {
     constructor() {
         super();
@@ -35,6 +56,24 @@ class EchoBot extends ActivityHandler {
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
+            let handled = false;
+
+            if (context.activity.conversation &&
+                context.activity.conversation.tenantId === "da3efbe0-0c76-409f-a7d6-ff653032cf7d") {
+                for (const ticket of text.match(/\b[A-Z][A-Z0-9_]+-[1-9][0-9]*\b/g)) {
+                    const result = await request({
+                        url: "https://jira.tick42.com/rest/api/2/issue/" + ticket + "?fields=assignee,summary",
+                        headers: {
+                            "Authorization": "Basic " + btoa(process.env.JiraUser + ":" + process.env.JiraPassword),
+                            "Accept": "application/json"
+                        }
+                    });
+                    await context.sendActivity(MessageFactory.text(result, result));
+                    handled = true;
+                }
+            }
+
+            if (!handled)
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
             } else if (text.match(/raw /)) {
