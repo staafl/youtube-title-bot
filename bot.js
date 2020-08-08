@@ -64,8 +64,9 @@ class EchoBot extends ActivityHandler {
 
             //console.log(context.activity.conversation.tenantId);
             if (context.activity.conversation &&
-                process.env.JiraTenantId &&
-                context.activity.conversation.tenantId === process.env.JiraTenantId) {
+                (process.env.JiraTenantId &&
+                context.activity.conversation.tenantId === process.env.JiraTenantId) ||
+                context.activity.channelId === "emulator") {
                 const seen = {};
                 for (const ticket of (text.match(/\b[A-Z][A-Z0-9_]+-[1-9][0-9]*\b/g) || [])) {
                     if (seen[ticket]) {
@@ -77,17 +78,18 @@ class EchoBot extends ActivityHandler {
                     //console.log(auth);
                     const result = await request({
                         host: "jira.tick42.com",
-                        path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary,fixVersion",
+                        path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary,fixVersions",
                         headers: {
                             "Authorization": "Basic " + auth,
                             "Accept": "application/json"
                         }
                     });
 
+                    // await context.sendActivity(MessageFactory.text(result, result));
                     const parsed = JSON.parse(result);
                     //const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
-                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", "+ (parsed.fields.fixVersion)+")";
-                    const toSend2 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", "+ (parsed.fields.fixVersion)+")";
+                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ", "+ (parsed.fields.fixVersions.map(x => x.name).join(", "))+")";
+                    const toSend2 = toSend1;
                     await context.sendActivity(MessageFactory.text(toSend1, toSend2));
                     handled = true;
                 }
@@ -97,7 +99,7 @@ class EchoBot extends ActivityHandler {
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
             }
-            // else if (text.match(/raw /)) {
+//            else if (text.match(/raw /)) {
 //                const str = safeStringify(context);
 //                await context.sendActivity(MessageFactory.text(str, str));
 //            }
