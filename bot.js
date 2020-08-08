@@ -36,7 +36,7 @@ class EchoBot extends ActivityHandler {
             //console.log(JSON.stringify(context.activity));
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
-            } else if (text.match(/^raw /) {
+            } else if (text.match(/^raw /)) {
                 const str = safeStringify(context);
                 await context.sendActivity(MessageFactory.text(str, str));
             } else if (text.match(/\b(fuck|ass|shit|stupid|moron|dumb|cunt|fool)/i)) {
