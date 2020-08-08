@@ -25,7 +25,10 @@ function request(options) {
   let reply = "";
   return new Promise((rs, rj) => {
         var callback = function(res) {
-          rs(`STATUS: ${res.statusCode}`);
+          if (res.statusCode + "" !== "200") {
+            rj(new Error("Error response from server: " + res.statusCode));
+            return;
+          }
           //console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
           res.setEncoding('utf8');
           res.on('data', function (chunk) {
@@ -80,7 +83,10 @@ class EchoBot extends ActivityHandler {
                             "Accept": "application/json"
                         }
                     });
-                    await context.sendActivity(MessageFactory.text("Result: " + result, "Result: " + result));
+
+                    const parsed = JSON.parse(result);
+                    const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
+                    await context.sendActivity(MessageFactory.text(toSend, toSend));
                     handled = true;
                 }
             }
@@ -88,7 +94,7 @@ class EchoBot extends ActivityHandler {
             if (!handled)
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
-            } 
+            }
             // else if (text.match(/raw /)) {
 //                const str = safeStringify(context);
 //                await context.sendActivity(MessageFactory.text(str, str));
