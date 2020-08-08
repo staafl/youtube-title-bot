@@ -64,8 +64,8 @@ class EchoBot extends ActivityHandler {
 
             //console.log(context.activity.conversation.tenantId);
             if (context.activity.conversation &&
-                (!context.activity.conversation.tenantId ||
-                (process.env.JiraTenantId && context.activity.conversation.tenantId === process.env.JiraTenantId))) {
+                process.env.JiraTenantId &&
+                context.activity.conversation.tenantId === process.env.JiraTenantId) {
                 const seen = {};
                 for (const ticket of (text.match(/\b[A-Z][A-Z0-9_]+-[1-9][0-9]*\b/g) || [])) {
                     if (seen[ticket]) {
