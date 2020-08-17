@@ -77,7 +77,7 @@ class EchoBot extends ActivityHandler {
                     const auth = Buffer.from(process.env.JiraUser + ":" + process.env.JiraPassword).toString("base64");
                     //console.log(auth);
                     const result = await request({
-                        host: "jira.tick42.com",
+                        host: process.env.JiraHost,
                         path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary,fixVersions,status",
                         headers: {
                             "Authorization": "Basic " + auth,
@@ -93,7 +93,8 @@ class EchoBot extends ActivityHandler {
                         fvString = ", fix versions: " + (parsed.fields.fixVersions.map(x => x.name).join(", "));
                     }
                     //const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
-                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (assignee: " + parsed.fields.assignee.displayName + ", status: " + parsed.fields.status.name + fvString + ")";
+                    const assignee = (parsed.fields.assignee && parsed.fields.assignee.displayName) || "None";
+                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (assignee: " + assignee + ", status: " + parsed.fields.status.name + fvString + ")";
                     const toSend2 = toSend1;
                     await context.sendActivity(MessageFactory.text(toSend1, toSend2));
                     handled = true;
