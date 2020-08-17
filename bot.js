@@ -62,7 +62,27 @@ class EchoBot extends ActivityHandler {
             try {
 
             //console.log(context.activity.conversation.tenantId);
-            if (text.match(/(sarcastic|condescending) laugh/i)) {
+            if (text.match(/\btell (.*)/i)) {
+                const from = "Velko"; //context.activity.from.name.replace(/ .*/, "");
+                const toTell = text
+                    .replace(/\btell ([^ ]+) \bto /i, "$1, ")
+                    .replace(/.*?tell /i, "")
+                    .replace(/\bme\b/i, from)
+                    .replace(/\bI\b/i, from )
+                    .replace(/\b'm\b/i, from + "'s")
+                    .replace(/\b've\b/i, "'s")
+                    .replace(/\bam\b/i, "is")
+                    .replace(/\bhe's\b/i, "you're")
+                    .replace(/\bshe's\b/i, "you're")
+                    .replace(/\bhas\b/i, "have")
+                    .replace(/\bhim\b/i, "you")
+                    .replace(/\bhis\b/i, "your")
+                    .replace(/\bhers\b/i, "your")
+                    .replace(/\bher\b/i, "your")
+                    .replace(/\bhe\b/i, "you")
+                    
+                await context.sendActivity(MessageFactory.text(toTell, toTell));
+            } else if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
             }
 //            else if (text.match(/raw /)) {
