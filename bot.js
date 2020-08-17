@@ -75,10 +75,16 @@ class EchoBot extends ActivityHandler {
                     .replace(/\bshe[^a-z]s\b/i, "you're")
                     .replace(/\bhas\b/i, "have")
                     .replace(/\bhim\b/i, "you")
+                    .replace(/\bhimself\b/i, "yourself")
                     .replace(/\bhis\b/i, "your")
                     .replace(/\bhers\b/i, "your")
+                    .replace(/\bherself\b/i, "yourself")
                     .replace(/\bher\b/i, "your")
                     .replace(/\bhe\b/i, "you")
+                    .replace(/\btheirs\b/i, "yours")
+                    .replace(/\btheir\b/i, "your")
+                    .replace(/\bthemselves\b/i, "yourselves")
+                    .replace(/\bthem\b/i, "you")
                     
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else if (text.match(/(sarcastic|condescending) laugh/i)) {
