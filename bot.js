@@ -63,16 +63,16 @@ class EchoBot extends ActivityHandler {
 
             //console.log(context.activity.conversation.tenantId);
             if (text.match(/\btell (.*)/i)) {
-                const from = "Velko"; //context.activity.from.name.replace(/ .*/, "");
+                const from = context.activity.from.name.replace(/ .*/, "");
                 const toTell = text
                     .replace(/^.*?\btell ([^ ]+) \b(to )?/i, "$1, ")
                     .replace(/\bme\b/i, from)
-                    .replace(/\bI\b/i, from )
+                    .replace(/\bI\b/i, from)
                     .replace(/\b'm\b/i, from + "'s")
                     .replace(/\b've\b/i, "'s")
                     .replace(/\bam\b/i, "is")
-                    .replace(/\bhe's\b/i, "you're")
-                    .replace(/\bshe's\b/i, "you're")
+                    .replace(/\bhe'.\b/i, "you're")
+                    .replace(/\bshe'.\b/i, "you're")
                     .replace(/\bhas\b/i, "have")
                     .replace(/\bhim\b/i, "you")
                     .replace(/\bhis\b/i, "your")
