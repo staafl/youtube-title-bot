@@ -60,48 +60,8 @@ class EchoBot extends ActivityHandler {
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
-            let handled = false;
 
             //console.log(context.activity.conversation.tenantId);
-            if ((context.activity.conversation &&
-                (process.env.JiraTenantId &&
-                context.activity.conversation.tenantId === process.env.JiraTenantId)) ||
-                context.activity.channelId === "emulator") {
-                const seen = {};
-                for (const ticket of (text.match(/\b[A-Z][A-Z0-9_]+-[1-9][0-9]*\b/g) || [])) {
-                    if (seen[ticket]) {
-                        continue;
-                    }
-                    seen[ticket] = true;
-                    //await context.sendActivity(MessageFactory.text(ticket, ticket));
-                    const auth = Buffer.from(process.env.JiraUser + ":" + process.env.JiraPassword).toString("base64");
-                    //console.log(auth);
-                    const result = await request({
-                        host: process.env.JiraHost,
-                        path: "/rest/api/2/issue/" + ticket + "?fields=assignee,summary,fixVersions,status",
-                        headers: {
-                            "Authorization": "Basic " + auth,
-                            "Accept": "application/json"
-                        }
-                    });
-
-                    // await context.sendActivity(MessageFactory.text(result, result));
-                    const parsed = JSON.parse(result);
-                    let fvString = "";
-                    if (parsed.fields.fixVersions &&
-                        parsed.fields.fixVersions.length) {
-                        fvString = ", fix versions: " + (parsed.fields.fixVersions.map(x => x.name).join(", "));
-                    }
-                    //const toSend = parsed.key + ": " + parsed.fields.summary + " (" + parsed.fields.assignee.displayName + ")";
-                    const assignee = (parsed.fields.assignee && parsed.fields.assignee.displayName) || "None";
-                    const toSend1 = "["+parsed.key + "](https://jira.tick42.com/browse/"+parsed.key+"): " + parsed.fields.summary + " (assignee: " + assignee + ", status: " + parsed.fields.status.name + fvString + ")";
-                    const toSend2 = toSend1;
-                    await context.sendActivity(MessageFactory.text(toSend1, toSend2));
-                    handled = true;
-                }
-            }
-
-            if (!handled)
             if (text.match(/(sarcastic|condescending) laugh/i)) {
                 await context.sendActivity(MessageFactory.text("Ha. Ha. Ha.", "Ha. Ha. Ha."));
             }
