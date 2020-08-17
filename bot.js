@@ -68,7 +68,7 @@ class EchoBot extends ActivityHandler {
                     .replace(/^.*?\btell ([^ ]+) \b(to )?/i, "$1, ")
                     .replace(/\bme\b/i, from)
                     .replace(/\bI\b/i, from)
-                    .replace(/\b[^a-z]m\b/i, from + "'s")
+                    .replace(/\b[^a-z]m\b/i, "'s")
                     .replace(/\b[^a-z]ve\b/i, "'s")
                     .replace(/\bam\b/i, "is")
                     .replace(/\bhe[^a-z]s\b/i, "you're")
