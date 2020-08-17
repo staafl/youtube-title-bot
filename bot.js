@@ -65,8 +65,7 @@ class EchoBot extends ActivityHandler {
             if (text.match(/\btell (.*)/i)) {
                 const from = "Velko"; //context.activity.from.name.replace(/ .*/, "");
                 const toTell = text
-                    .replace(/\btell ([^ ]+) \bto /i, "$1, ")
-                    .replace(/.*?tell /i, "")
+                    .replace(/^.*?\btell ([^ ]+) \b(to )?/i, "$1, ")
                     .replace(/\bme\b/i, from)
                     .replace(/\bI\b/i, from )
                     .replace(/\b'm\b/i, from + "'s")
