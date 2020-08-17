@@ -86,6 +86,7 @@ class EchoBot extends ActivityHandler {
                     .replace(/\btheir\b/i, "your")
                     .replace(/\bthemselves\b/i, "yourselves")
                     .replace(/\bthem\b/i, "you")
+                    .replace(/\byou ([^ ]+)s\b/i, "you $1")
                     
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else if (text.match(/(sarcastic|condescending) laugh/i)) {
