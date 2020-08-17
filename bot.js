@@ -68,11 +68,11 @@ class EchoBot extends ActivityHandler {
                     .replace(/^.*?\btell ([^ ]+) \b(to )?/i, "$1, ")
                     .replace(/\bme\b/i, from)
                     .replace(/\bI\b/i, from)
-                    .replace(/\b'm\b/i, from + "'s")
-                    .replace(/\b've\b/i, "'s")
+                    .replace(/\b[^a-z]m\b/i, from + "'s")
+                    .replace(/\b[^a-z]ve\b/i, "'s")
                     .replace(/\bam\b/i, "is")
-                    .replace(/\bhe'.\b/i, "you're")
-                    .replace(/\bshe'.\b/i, "you're")
+                    .replace(/\bhe[^a-z]s\b/i, "you're")
+                    .replace(/\bshe[^a-z]s\b/i, "you're")
                     .replace(/\bhas\b/i, "have")
                     .replace(/\bhim\b/i, "you")
                     .replace(/\bhis\b/i, "your")
@@ -96,7 +96,7 @@ class EchoBot extends ActivityHandler {
                 await context.sendActivity(MessageFactory.text(pkg.version, pkg.version));
             } else if (text.match(/\b(hi|hello)\b/i)) {
                 await context.sendActivity(MessageFactory.text("Well hello there.", "Well hello there."));
-            } else if (text.match(/who's (the best|the greatest|right)/i)) {
+            } else if (text.match(/who[^a-z]s (the best|the greatest|right)/i)) {
                 await context.sendActivity(MessageFactory.text("Why, Velko, of course.", "Why, Velko, of course."));
             } else {
                 const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
