@@ -122,6 +122,20 @@ class EchoBot extends ActivityHandler {
                 await context.sendActivity(MessageFactory.text("Well hello there.", "Well hello there."));
             } else if (text.match(/who[^a-z]s (the best|the greatest|right)/i)) {
                 await context.sendActivity(MessageFactory.text("Why, Velko, of course.", "Why, Velko, of course."));
+            } else if (text.match(/https:[/][/]twitter[.]com[/][^/]+[/]status[/]([^?/]+)[?]?\b/)) {
+                const match = text.match(/https:[/][/]twitter[.]com[/][^/]+[/]status[/]([^?/]+)[?]?\b/);
+                const result = JSON.parse(await request(
+                    {
+                        host: "api.twitter.com",
+                        path: "/1.1/statuses/show.json?id=" + match[1],
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + process.env.TwitterBearer
+                        }
+                    }));
+
+                const toTell = result.user.name + ": " + result.text;
+                await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else {
                 const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
                 const urls = text.match(new RegExp(rx, "ig")) || text.match(/https?:[/][/]youtu[.]be[/]([a-zA-Z0-9_-]+)/ig);
