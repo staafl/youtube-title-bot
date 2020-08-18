@@ -65,7 +65,9 @@ class EchoBot extends ActivityHandler {
             if (text.match(/\btell (.*)/i)) {
                 const from = context.activity.from.name.replace(/ .*/, "");
                 const toTell = text
-                    .replace(/^.*?\btell ([^ ]+) \b(to )?/i, "$1, ")
+                    .replace(/^.*?\btell ([^ ]+) \b(to )?/i, function(_, whom) {
+                        return whom.substring(0, 1).toUpperCase() + whom.substring(1) + ", ";
+                    })
                     .replace(/\bme\b/i, from)
                     .replace(/\bI\b/i, from)
                     .replace(/\b('|&apos;)m\b/i, "'s")
@@ -87,7 +89,7 @@ class EchoBot extends ActivityHandler {
                     .replace(/\bthemselves\b/i, "yourselves")
                     .replace(/\bthem\b/i, "you")
                     .replace(/\byou ([^ ]+)s\b/i, "you $1")
-                    
+
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else if (text.match(/\bplease\b/i)) {
                 let toTell = text.replace(
