@@ -62,46 +62,53 @@ class EchoBot extends ActivityHandler {
             try {
 
             //console.log(context.activity.conversation.tenantId);
+            const from = context.activity.from.name.replace(/ .*/, "");
             if (text.match(/\btell (.*)/i)) {
-                const from = context.activity.from.name.replace(/ .*/, "");
                 const toTell = text
                     .replace(/^.*?\btell ([^ ]+) \b(to )?/i, function(_, whom) {
                         return whom.substring(0, 1).toUpperCase() + whom.substring(1) + ", ";
                     })
-                    .replace(/\bme\b/i, from)
-                    .replace(/\bI\b/i, from)
-                    .replace(/\b('|&apos;)m\b/i, "'s")
-                    .replace(/\b('|&apos;)ve\b/i, "'s")
-                    .replace(/\bam\b/i, "is")
-                    .replace(/\bhe('|&apos;)s\b/i, "you're")
-                    .replace(/\bshe('|&apos;)s\b/i, "you're")
-                    .replace(/\bhas\b/i, "have")
-                    .replace(/\bhim\b/i, "you")
-                    .replace(/\bhimself\b/i, "yourself")
-                    .replace(/\bhis\b/i, "your")
-                    .replace(/\bhers\b/i, "your")
-                    .replace(/\bherself\b/i, "yourself")
-                    .replace(/\bher\b/i, "you")
-                    .replace(/\bhe\b/i, "you")
-                    .replace(/\bshe\b/i, "you")
-                    .replace(/\btheirs\b/i, "yours")
-                    .replace(/\btheir\b/i, "your")
-                    .replace(/\bthemselves\b/i, "yourselves")
-                    .replace(/\bthem\b/i, "you")
-                    .replace(/\byou ([^ ]+)s\b/i, "you $1")
+                    .replace(/\bme\b/ig, from)
+                    .replace(/\bI\b/ig, from)
+                    .replace(/\bmy\b/ig, from + "'s")
+                    .replace(/\b('|&apos;)m\b/ig, "'s")
+                    .replace(/\b('|&apos;)ve\b/ig, "'s")
+                    .replace(/\bam\b/ig, "is")
+                    .replace(/\bhe('|&apos;)s\b/ig, "you're")
+                    .replace(/\bshe('|&apos;)s\b/ig, "you're")
+                    .replace(/\bhas\b/ig, "have")
+                    .replace(/\bhim\b/ig, "you")
+                    .replace(/\bhimself\b/ig, "yourself")
+                    .replace(/\bhis\b/ig, "your")
+                    .replace(/\bhers\b/ig, "your")
+                    .replace(/\bherself\b/ig, "yourself")
+                    .replace(/\bher\b/ig, "you")
+                    .replace(/\bhe\b/ig, "you")
+                    .replace(/\bshe\b/ig, "you")
+                    .replace(/\btheirs\b/ig, "yours")
+                    .replace(/\btheir\b/ig, "your")
+                    .replace(/\bthemselves\b/ig, "yourselves")
+                    .replace(/\bthem\b/ig, "you")
+                    .replace(/\byou ([^ ]+)s\b/ig, "you $1")
+                    .replace(/s('|&apos;)s/ig, "s'")
 
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
-            } else if (text.match(/\bplease\b/i)) {
+            } else if (text.match(/\bplease\b/ig)) {
                 let toTell = text.replace(
                     /^.*?\bplease\b +([^ ]+) ?(.*)/i, function(_, verb, rest) {
-                        if (verb.match(/(sh|ch|x|z|ss|o)$/i)) {
+                        if (verb.match(/(sh|ch|x|z|ss|o)$/ig)) {
                             verb += "es";
-                        } else if (verb.match(/[^aeoiu]y$/i)) {
-                            verb = verb.replace(/([^aeoiu])y$/i, "$1ies");
+                        } else if (verb.match(/[^aeoiu]y$/ig)) {
+                            verb = verb.replace(/([^aeoiu])y$/ig, "$1ies");
                         } else {
                             verb += "s";
                         }
                         verb = verb.substring(0, 1).toUpperCase() + verb.substring(1).toLowerCase();
+                        rest = rest
+                            .replace(/\bme\b/ig, from)
+                            .replace(/\bmy\b/ig, from + "'s")
+                            .replace(/s('|&apos;)s/ig, "s'")
+
                         return "*" + (verb + " " + rest).trim() + "*";
                     });
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
