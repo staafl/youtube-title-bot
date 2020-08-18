@@ -91,14 +91,16 @@ class EchoBot extends ActivityHandler {
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else if (text.match(/\bplease\b/i)) {
                 let toTell = text.replace(
-                    /^.*?\bplease\b +([^ ]+) ([^ ]+) ?(.*)/i, function(_, verb, whom, rest) {
-                        if (verb[verb.length - 1].toLowerCase() === "h") {
+                    /^.*?\bplease\b +([^ ]+) ?(.*)/i, function(_, verb, rest) {
+                        if (verb.match(/(sh|ch|x|z|ss|o)$/i)) {
                             verb += "es";
+                        } else if (verb.match(/[^aeoiu]y$/i)) {
+                            verb = verb.replace(/([^aeoiu])y$/i, "$1ies");
                         } else {
                             verb += "s";
                         }
                         verb = verb.substring(0, 1).toUpperCase() + verb.substring(1).toLowerCase();
-                        return "/me *" + (verb + " " + whom + " " + rest).trim() + "*";
+                        return "*" + (verb + " " + rest).trim() + "*";
                     });
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else if (text.match(/(sarcastic|condescending) laugh/i)) {
