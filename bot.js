@@ -134,14 +134,14 @@ class EchoBot extends ActivityHandler {
                 const result = JSON.parse(await request(
                     {
                         host: "api.twitter.com",
-                        path: "/1.1/statuses/show.json?id=" + match[1],
+                        path: "/1.1/statuses/show.json?id=" + match[1] + "&tweet_mode=extended",
                         headers: {
                             Accept: "application/json",
                             Authorization: "Bearer " + process.env.TwitterBearer
                         }
                     }));
 
-                const toTell = result.user.name + ": " + result.text;
+                const toTell = result.user.name + ": " + (result.full_text || result.text);
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else {
                 const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
