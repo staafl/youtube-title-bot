@@ -119,7 +119,9 @@ class EchoBot extends ActivityHandler {
 //                const str = safeStringify(context);
 //                await context.sendActivity(MessageFactory.text(str, str));
 //            }
-            else if (text.match(/\b(fuck|ass|shit|stupid|moron|dumb|cunt|fool)/i)) {
+            else if (text.match(/\b(thanks|thank you|10x)\b/i)) {
+                await context.sendActivity(MessageFactory.text("Anything for you, my pretty!", "Anything for you, my pretty!"));
+            } else if (text.match(/\b(fuck|ass|shit|stupid|moron|dumb|cunt|fool)/i)) {
                 await context.sendActivity(MessageFactory.text("Bite my shiny metal ass!", "Bite my shiny metal ass!"));
             } else if (text.match(/good bot/i)) {
                 await context.sendActivity(MessageFactory.text("Good human", "Good human"));
