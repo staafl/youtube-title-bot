@@ -106,7 +106,13 @@ class EchoBot extends ActivityHandler {
                     }
                 }
 
-                const toPrint = players.map(x => x.rank + " " + x.name + " " + x.elo).join("\r\n");
+                const toPrint = players
+                    .map(x =>
+                        x.rank + " " +
+                        x.name + " " +
+                        x.elo +
+                        (x.provisional ? " (provisional)" + ""))
+                    .join("\r\n");
 
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
 
