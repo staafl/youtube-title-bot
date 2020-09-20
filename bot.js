@@ -103,8 +103,11 @@ class EchoBot extends ActivityHandler {
 
                 const sheet = doc.sheetsByIndex[2];
                 await sheet.addRow([user1, user2, date, 1])
+                
+                const rows = await sheet.getRows()
 
-                await context.sendActivity(MessageFactory.text("Done", "Done"));
+                const toPrint = "Done, " + rows.length + " games recorded.";
+                await context.sendActivity(MessageFactory.text(toPrint, toPrint));
 
             } else if (text.match(/\btell (.*)/i)) {
                 const toTell = text
