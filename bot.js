@@ -81,11 +81,13 @@ class EchoBot extends ActivityHandler {
                 await sheet.loadCells('C3:E' + maxPlayers);
                 const players = [];
                 for (let ii = 3; ii < maxPlayers; ii += 1) {
-                    if (sheet.getCellByA1("E" + ii).value > 0) {
+                    const games = sheet.getCellByA1("E" + ii).value + "";
+                    if (games > 0) {
                         players.push({
                             name: sheet.getCellByA1("C" + ii).value,
                             elo: sheet.getCellByA1("D" + ii).value,
-                            provisional: parseInt(sheet.getCellByA1("E" + ii).value < 10)
+                            provisional: parseInt(games) < 10,
+                            games
                         });
                     }
                 }
@@ -111,7 +113,8 @@ class EchoBot extends ActivityHandler {
                         x.rank + " " +
                         x.name + " " +
                         x.elo +
-                        (x.provisional ? " (provisional)" : ""))
+                        (x.provisional ? " (provisional)" : "") +
+                        " - " + x.games + " games")
                     .join("\r\n");
 
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
