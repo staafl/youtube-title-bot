@@ -111,7 +111,7 @@ class EchoBot extends ActivityHandler {
                         x.rank + " " +
                         x.name + " " +
                         x.elo +
-                        (x.provisional ? " (provisional)" + ""))
+                        (x.provisional ? " (provisional)" : ""))
                     .join("\r\n");
 
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
