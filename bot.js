@@ -84,7 +84,7 @@ class EchoBot extends ActivityHandler {
                     const a1 = sheet.getCellByA1("C" + ii);
                     //toPrint = a1.value;
                     if (a1.value === user) {
-                        toPrint = sheet.getCellByA1("D" + 3).value + "";
+                        toPrint = sheet.getCellByA1("D" + ii).value + "";
                         break;
                     }
                 }
