@@ -63,9 +63,54 @@ class EchoBot extends ActivityHandler {
             //console.log(JSON.stringify(context.activity));
             try {
 
+                const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            if (text.match(/\btennis42 elo ([^ ]+)\b/i)) {
+            if (text.match(/\btennis42 ranking\b/i)) {
+                const user = text.match(/\btennis42 ranking\b/i)[1];
+                const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
+
+                doc.useServiceAccountAuth({
+                  client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+                  private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+                });
+
+                await doc.loadInfo();
+
+                const sheet = doc.sheetsByIndex[1];
+                await sheet.loadCells('C3:E' + maxPlayers);
+                const players = [];
+                for (let ii = 3; ii < maxPlayers; ii += 1) {
+                    if (sheet.getCellByA1("E" + ii).value > 0) {
+                        players.push({
+                            name: sheet.getCellByA1("C" + ii).value,
+                            elo: sheet.getCellByA1("D" + ii).value,
+                            provisional: parseInt(sheet.getCellByA1("E" + ii).value < 10)
+                        });
+                    }
+                }
+                players.sort((x, y) => {
+                    if (x.elo > y.elo) {
+                        return -1;
+                    } else if (x.elo < y.elo) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+                let rank = 1;
+                for (let ii = 0; ii < players.length; ii += 1) {
+                    players[ii].rank = rank;
+                    if (ii < players.length - 1 && players[ii + 1].elo < players[ii].elo) {
+                        rank += 1;
+                    }
+                }
+
+                const toPrint = players.map(x => x.rank + " " + x.name + " " + x.elo).join("\r\n");
+
+                await context.sendActivity(MessageFactory.text(toPrint, toPrint));
+
+            } else if (text.match(/\btennis42 elo ([^ ]+)\b/i)) {
                 const user = text.match(/\btennis42 elo ([^ ]+)\b/i)[1];
                 const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
 
@@ -76,15 +121,15 @@ class EchoBot extends ActivityHandler {
                 await doc.loadInfo();
 
                 const sheet = doc.sheetsByIndex[1];
-                const max = 20;
                 await sheet.loadCells('C3:D20');
                 let toPrint = "Who the fuck is " + user + "?";
-                for (let ii = 3; ii < max; ii += 1) {
+                for (let ii = 3; ii < maxPlayers; ii += 1) {
                     console.log(ii);
                     const a1 = sheet.getCellByA1("C" + ii);
                     //toPrint = a1.value;
                     if (a1.value === user) {
-                        toPrint = sheet.getCellByA1("D" + ii).value + "";
+                        toPrint = sheet.getCellByA1("D" + ii).value + "" +
+                            ((parseInt(sheet.getCellByA1("E" + ii).value) < 10) ? " (provisional)" : "");
                         break;
                     }
                 }
@@ -103,7 +148,7 @@ class EchoBot extends ActivityHandler {
 
                 const sheet = doc.sheetsByIndex[2];
                 await sheet.addRow([user1, user2, date, 1])
-                
+
                 const rows = await sheet.getRows()
 
                 const toPrint = "Done, " + rows.length + " games recorded.";
