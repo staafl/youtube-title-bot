@@ -5,6 +5,8 @@ const { ActivityHandler, MessageFactory } = require('botbuilder');
 const http = require('https');
 const pkg = require("./package.json");
 
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+
 function safeStringify(obj, indent = 2) {
   let cache = [];
   const retVal = JSON.stringify(
@@ -63,7 +65,48 @@ class EchoBot extends ActivityHandler {
 
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            if (text.match(/\btell (.*)/i)) {
+            if (text.match(/\btennis42 elo ([^ ]+)\b/i)) {
+                const user = text.match(/\btennis42 elo ([^ ]+)\b/i)[1];
+                const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
+
+                doc.useServiceAccountAuth({
+                  client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+                  private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+                });
+                await doc.loadInfo();
+
+                const sheet = doc.sheetsByIndex[1];
+                const max = 20;
+                await sheet.loadCells('C3:D20');
+                let toPrint = "Who the fuck is " + user + "?";
+                for (let ii = 3; ii < max; ii += 1) {
+                    console.log(ii);
+                    const a1 = sheet.getCellByA1("C" + ii);
+                    //toPrint = a1.value;
+                    if (a1.value === user) {
+                        toPrint = sheet.getCellByA1("D" + 3).value + "";
+                        break;
+                    }
+                }
+
+                await context.sendActivity(MessageFactory.text(toPrint, toPrint));
+
+            } else if (text.match(/\btennis42 record ([^ ]+) ([^ ]+) ([^ ]+)\b/i)) {
+                const [_, date, user1, user2] = text.match(/\btennis42 record ([^ ]+) ([^ ]+) ([^ ]+)\b/i);
+                const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
+
+                doc.useServiceAccountAuth({
+                  client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+                  private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, "\n"),
+                });
+                await doc.loadInfo();
+
+                const sheet = doc.sheetsByIndex[2];
+                await sheet.addRow([user1, user2, date, 1])
+
+                await context.sendActivity(MessageFactory.text("Done", "Done"));
+
+            } else if (text.match(/\btell (.*)/i)) {
                 const toTell = text
                     .replace(/^.*?\btell ([^ ]+) \b(to )?/i, function(_, whom) {
                         return whom.substring(0, 1).toUpperCase() + whom.substring(1) + ", ";
