@@ -231,7 +231,7 @@ class EchoBot extends ActivityHandler {
                 await context.sendActivity(MessageFactory.text("Well hello there.", "Well hello there."));
             } else if (text.match(/who[^a-z]s (the best|the greatest|right)/i)) {
                 await context.sendActivity(MessageFactory.text("Why, Velko, of course.", "Why, Velko, of course."));
-            } else if (text.match(/https:[/][/](.*?)twitter[.]com[/][^/]+[/]status[/]([^?/]+?)[?]?\b/)) {
+            } else if (text.match(/https:[/][/]([^/]+[.])?twitter[.]com[/][^/]+[/]status[/]([^?/]+?)[?]?\b/)) {
                 const match = text.match(/https:[/][/]twitter[.]com[/][^/]+[/]status[/]([^?/]+?)[?]?\b/);
                 const result = JSON.parse(await request(
                     {
