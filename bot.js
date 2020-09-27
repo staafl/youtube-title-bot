@@ -130,7 +130,7 @@ class EchoBot extends ActivityHandler {
                 await doc.loadInfo();
 
                 const sheet = doc.sheetsByIndex[1];
-                await sheet.loadCells('C3:D20');
+                await sheet.loadCells('C3:E20');
                 let toPrint = "Who the fuck is " + user + "?";
                 for (let ii = 3; ii < maxPlayers; ii += 1) {
                     console.log(ii);
