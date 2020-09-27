@@ -139,7 +139,7 @@ class EchoBot extends ActivityHandler {
                     //toPrint = a1.value;
                     if (a1.value === user) {
                         toPrint = sheet.getCellByA1("D" + ii).value + " - " +
-                            (((games < 10) ? " provisional: " : "") + games + " games");
+                            games + " games " + ((games < 10) ? "(provisional)" : "");
                         break;
                     }
                 }
