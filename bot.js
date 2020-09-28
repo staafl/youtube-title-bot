@@ -139,15 +139,15 @@ class EchoBot extends ActivityHandler {
                     //toPrint = a1.value;
                     if (a1.value === user) {
                         toPrint = sheet.getCellByA1("D" + ii).value + " (" +
-                            games + " games" + ((games < 10) ? ", provisional)" : ")");
+                            games + " games" + ((games < 10) ? " - provisional)" : ")");
                         break;
                     }
                 }
 
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
 
-            } else if (text.match(/\btennis42 record ([^ ]+) ([^ ]+) ([^ ]+)\b/i)) {
-                const [_, date, user1, user2] = text.match(/\btennis42 record ([^ ]+) ([^ ]+) ([^ ]+)\b/i);
+            } else if (text.match(/\btennis42 record ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)?\b/i)) {
+                const [_, date, user1, user2, score] = text.match(/\btennis42 record ([^ ]+) ([^ ]+) ([^ ]+)\b/i);
                 const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
 
                 doc.useServiceAccountAuth({
@@ -157,7 +157,7 @@ class EchoBot extends ActivityHandler {
                 await doc.loadInfo();
 
                 const sheet = doc.sheetsByIndex[2];
-                await sheet.addRow([user1, user2, date, 1])
+                await sheet.addRow([user1, user2, date, 1, "", "", score])
 
                 const rows = await sheet.getRows()
 
