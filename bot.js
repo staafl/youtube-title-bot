@@ -247,11 +247,19 @@ class EchoBot extends ActivityHandler {
                 const toTell = result.user.name + ": " + (result.full_text || result.text);
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else {
-                const rx = "https?:[/][/](www[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
-                const urls = text.match(new RegExp(rx, "ig")) || text.match(/https?:[/][/]youtu[.]be[/]([a-zA-Z0-9_-]+)/ig);
+                const rx = "https?:[/][/](www[.])?(m[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
+                const urls =
+                    text.match(new RegExp(rx, "ig")) ||
+                    text.match(/https?:[/][/](www[.])?(m[.])?youtu[.]be[/]([a-zA-Z0-9_-]+)/ig);
+
                 if (urls && urls.length) {
                     for (const url_ of urls) {
-                        const url = url_.replace(/https?:[/][/]youtu[.]be[/]/i, "https://www.youtube.com/watch?v=");
+                        const url = url_
+                            .replace(
+                                /https?:[/][/](www[.])?(m[.])?youtu[.]be[/]/i,
+                                "https://www.youtube.com/watch?v=")
+                            .replace(/m[.]youtube[.]/i, "youtube.");
+
                         let reply = "";
                         await new Promise((rs) => {
                             var callback = function(res) {
