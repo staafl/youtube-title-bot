@@ -247,7 +247,7 @@ class EchoBot extends ActivityHandler {
                 const toTell = result.user.name + ": " + (result.full_text || result.text);
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
             } else {
-                const rx = "https?:[/][/](www[.])?(m[.])?youtube[.]com[/]watch[?](.*&)?v=([a-zA-Z0-9_-]+)";
+                const rx = "https?:[/][/](www[.])?(m[.])?youtube[.]com[/]watch[?](.*(&|&amp;))?v=([a-zA-Z0-9_-]+)";
                 const urls =
                     text.match(new RegExp(rx, "ig")) ||
                     text.match(/https?:[/][/](www[.])?(m[.])?youtu[.]be[/]([a-zA-Z0-9_-]+)/ig);
@@ -259,7 +259,7 @@ class EchoBot extends ActivityHandler {
                                 /https?:[/][/](www[.])?(m[.])?youtu[.]be[/]/i,
                                 "https://www.youtube.com/watch?v=")
                             .replace(/m[.]youtube[.]/i, "youtube.")
-                            .replace(/[/][^/]+[&|?]v=/, "/watch?v=");
+                            .replace(/[/][^/]+[&|?](amp;)?v=/, "/watch?v=");
 
                         let reply = "";
                         await new Promise((rs) => {
