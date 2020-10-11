@@ -258,7 +258,8 @@ class EchoBot extends ActivityHandler {
                             .replace(
                                 /https?:[/][/](www[.])?(m[.])?youtu[.]be[/]/i,
                                 "https://www.youtube.com/watch?v=")
-                            .replace(/m[.]youtube[.]/i, "youtube.");
+                            .replace(/m[.]youtube[.]/i, "youtube.")
+                            .replace(/[/][^/]+[&|?]v=/, "/watch?v=");
 
                         let reply = "";
                         await new Promise((rs) => {
