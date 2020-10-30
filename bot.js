@@ -69,7 +69,8 @@ class EchoBot extends ActivityHandler {
             if (text.match(/\bcovid\b/i)) {
                 const result = await (await fetch("https://api.covid19api.com/summary")).json();
                 const bg = result.Countries.find(x => x.CountryCode === "BG");
-                const text = new Date().toISOString().substring(0,10) + " New Cases: " + bg.NewConfirmed + ", Total: " + bg.TotalConfirmed;
+                const toPrint = new Date().toISOString().substring(0,10) + " New Cases: " + bg.NewConfirmed + ", Total: " + bg.TotalConfirmed;
+                await context.sendActivity(MessageFactory.text(toPrint, toPrint));
                 
             } else if (text.match(/\btennis42 ranking\b/i)) {
                 const user = text.match(/\btennis42 ranking\b/i)[1];
