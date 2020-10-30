@@ -66,7 +66,12 @@ class EchoBot extends ActivityHandler {
                 const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            if (text.match(/\btennis42 ranking\b/i)) {
+            if (text.match(/\bcovid\b/i)) {
+                const result = await (await fetch("https://api.covid19api.com/summary")).json();
+                const bg = result.Countries.find(x => x.countryCode == "BG");
+                const text = new Date().toISOString().substring(0,10) + " New Cases: " + bg.NewConfirmed + ", Total: " + bg.TotalConfirmed;
+                
+            } else if (text.match(/\btennis42 ranking\b/i)) {
                 const user = text.match(/\btennis42 ranking\b/i)[1];
                 const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
 
