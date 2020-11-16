@@ -7,6 +7,10 @@ const pkg = require("./package.json");
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function safeStringify(obj, indent = 2) {
   let cache = [];
   const retVal = JSON.stringify(
@@ -66,15 +70,15 @@ class EchoBot extends ActivityHandler {
                 const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            if (text.match(/\bcovid\b *([a-z][a-z])?/i)) {
+            if (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)) {
                 const result = await (await fetch("https://api.covid19api.com/summary")).json();
-                const cc = (text.match(/\bcovid\b *([a-z][a-z])?/i)[1] || "BG").toUpperCase();
+                const cc = (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)[1] || "BG").toUpperCase();
                 const bg = result.Countries.find(x => x.CountryCode === cc);
                 let toPrint;
                 if (!bg) {
                     toPrint = "WTF country is " + cc;
                 } else {
-                    toPrint = new Date().toISOString().substring(0,10) + " New Cases " + cc + ": " + bg.NewConfirmed + ", Total: " + bg.TotalConfirmed;
+                    toPrint = new Date().toISOString().substring(0,10) + " New Cases " + cc + ": " + numberWithCommas(bg.NewConfirmed) + ", Total: " + numberWithCommas(bg.TotalConfirmed);
                 }
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
                 
