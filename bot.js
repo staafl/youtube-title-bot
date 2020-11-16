@@ -66,10 +66,16 @@ class EchoBot extends ActivityHandler {
                 const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            if (text.match(/\bcovid\b/i)) {
+            if (text.match(/\bcovid\b *([a-z][a-z])?/i)) {
                 const result = await (await fetch("https://api.covid19api.com/summary")).json();
-                const bg = result.Countries.find(x => x.CountryCode === "BG");
-                const toPrint = new Date().toISOString().substring(0,10) + " New Cases: " + bg.NewConfirmed + ", Total: " + bg.TotalConfirmed;
+                const cc = (text.match(/\bcovid\b *([a-z][a-z])?/i)[1] || "BG").toUpperCase();
+                const bg = result.Countries.find(x => x.CountryCode === cc);
+                let toPrint;
+                if (!bg) {
+                    toPrint = "WTF country is " + cc;
+                } else {
+                    toPrint = new Date().toISOString().substring(0,10) + " New Cases " + cc + ": " + bg.NewConfirmed + ", Total: " + bg.TotalConfirmed;
+                }
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
                 
             } else if (text.match(/\btennis42 ranking\b/i)) {
