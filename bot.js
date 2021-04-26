@@ -7,6 +7,12 @@ const pkg = require("./package.json");
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
+function getHost(url) {
+    return url.replace(/(https?:[/][/].*?)(?:[/].*)?/i, "$1");
+}
+function getPath(url) {
+    return url.replace(/(?:https?:[/][/].*?)([/].*)?/i, "$1");
+}
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -262,6 +268,40 @@ class EchoBot extends ActivityHandler {
 
                 const toTell = result.user.name + ": " + (result.full_text || result.text);
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
+            } else if (text.match(/\btitle /i)) {
+                let reply = "";
+                const url = text.match(/https?.*/);
+                await context.sendActivity(MessageFactory.text(getHost(url) + " " + getPath(url), getHost(url) + " " + getPath(url)));
+                await new Promise((rs) => {
+                    var callback = function(res) {
+                      //console.log(`STATUS: ${res.statusCode}`);
+                      //console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+                      res.setEncoding('utf8');
+                      res.on('data', function (chunk) {
+                        reply += chunk;
+                      });
+
+                      res.on('end', function () {
+                        rs();
+                      });
+                    };
+
+                    const options = {
+                        host: getHost(url),
+                        path: getPath(url),
+                        headers: {
+                          accept: "*/*",
+                          ["user-agent"]: "curl"
+                        }
+                    };
+                    http.get(options, callback).end();
+                });
+                const matched = reply.match(/<title>([^<]+)<[/]title>/);
+                const replyText = (matched && matched.length && matched[1]) ?
+                    url_ + ": " + matched[1].replace(" - YouTube", "") :
+                    url_ + ": <can't find title>";
+                await context.sendActivity(MessageFactory.text(replyText, replyText));
+                break;                
             } else {
                 const rx = "https?:[/][/](www[.])?(m[.])?youtube[.]com[/]watch[?](.*?(&|&amp;))?v=([a-zA-Z0-9_-]+)";
                 const urls =
