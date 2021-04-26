@@ -8,10 +8,10 @@ const pkg = require("./package.json");
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 function getHost(url) {
-    return url.replace(/(https?:[/][/].*?)(?:[/].*)?/i, "$1");
+    return url.replace(/(https?:[/][/][^/]+)(?:[/].*)?/i, "$1");
 }
 function getPath(url) {
-    return url.replace(/(?:https?:[/][/].*?)([/].*)?/i, "$1");
+    return url.replace(/(?:https?:[/][/][^/]+)([/].*)?/i, "$1").replace(/#.*/, "");
 }
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
