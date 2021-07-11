@@ -108,6 +108,7 @@ class EchoBot extends ActivityHandler {
             let evalRegex = /\beval\b (.+)/sm;
 
             let evalMatch = (escapeHTML(text)||"");
+            await context.sendActivity(MessageFactory.text(evalMatch, evalMatch));
             evalMatch = evalMatch.replace(/\n/g, "");
             evalMatch = evalMatch.replace(/\r/g, "");
             evalMatch = evalMatch.trim();
