@@ -108,7 +108,7 @@ class EchoBot extends ActivityHandler {
             let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/sm;
             
                 await context.sendActivity(MessageFactory.text("here", "here"));
-            let evalMatch = escapeHTML(text).replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
+            let evalMatch = (escapeHTML(text)||"").replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
