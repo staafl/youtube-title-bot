@@ -110,7 +110,7 @@ class EchoBot extends ActivityHandler {
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
-                let result = eval(evalMatch[1]).split(/\n/);
+                let result = eval(evalMatch[1]);//.split(/\n/);
                 if (typeof result === "object") {
                     result = JSON.stringify(result)
                 }
