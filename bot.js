@@ -97,7 +97,7 @@ class EchoBot extends ActivityHandler {
 //                next();
 //                return;
 //            }
-            const text = escapeHTML(context.activity.text || "");
+            const text = context.activity.text || "";
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
@@ -106,12 +106,13 @@ class EchoBot extends ActivityHandler {
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
             let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/sm;
-            let evalMatch = text.replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
+            let evalMatch = escapeHTML(text).replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
-                const toSend = JSON.stringify(eval(evalMatch[1]));
-                await context.sendActivity(MessageFactory.text(toSend, toSend));
+                for (const line of JSON.stringify(eval(evalMatch[1])).split(/\n/)) {;
+                    await context.sendActivity(MessageFactory.text(line, line));
+                }
                 return;
             }
             else if (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)) {
