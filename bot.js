@@ -108,17 +108,14 @@ class EchoBot extends ActivityHandler {
             let evalRegex = /\beval\b (.+)/sm;
 
             let evalMatch = (escapeHTML(text)||"");
-            await context.sendActivity(MessageFactory.text(evalMatch, evalMatch));
             evalMatch = evalMatch.replace(/\n/g, "");
             evalMatch = evalMatch.replace(/\r/g, "");
             evalMatch = evalMatch.trim();
             evalMatch = evalMatch.match(evalRegex);
-            await context.sendActivity(MessageFactory.text(JSON.stringify(evalMatch), JSON.stringify(evalMatch)));
 
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
-                await context.sendActivity(MessageFactory.text("there", "there"));
                 let result = eval(evalMatch[1]);//.split(/\n/);
                 if (typeof result === "object") {
                     result = JSON.stringify(result)
@@ -128,7 +125,6 @@ class EchoBot extends ActivityHandler {
 eval ["  /\\ ___ /\\", " (  o   o  )", "  \\  >#<  /", "  /       \\", " /         \\       ^", "|           |     //", " \\         /    //", "  ///  ///   --"].join("\n")
 {code}
 */
-                await context.sendActivity(MessageFactory.text("where", "where"));
                 await context.sendActivity(MessageFactory.text(result + "", result + ""));
                 return;
             }
