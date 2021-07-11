@@ -109,10 +109,15 @@ class EchoBot extends ActivityHandler {
 
             await context.sendActivity(MessageFactory.text("xhere", "xhere"));
             let evalMatch = (escapeHTML(text)||"");
+            await context.sendActivity(MessageFactory.text("xhere1", "xhere"));
             evalMatch = evalMatch.replace(/\n/g, "");
+            await context.sendActivity(MessageFactory.text("xhere2", "xhere"));
             evalMatch = evalMatch.replace(/\r/g, "");
+            await context.sendActivity(MessageFactory.text("xhere3", "xhere"));
             evalMatch = evalMatch.trim();
+            await context.sendActivity(MessageFactory.text("xhere4", "xhere"));
             evalMatch = evalMatch.match(evalRegex);
+            await context.sendActivity(MessageFactory.text("xhere5", "xhere"));
 
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
