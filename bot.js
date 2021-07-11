@@ -76,7 +76,15 @@ class EchoBot extends ActivityHandler {
                 const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            if (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)) {
+                            let evalRegex = /(?:^|tick42-bot *(?:<[/]at>)?) *eval\b (.+)/s;
+                let evalMatch = text.replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
+            if (evalMatch) {
+                //await context.send(evalMatch[1], true);
+                //await context.send(JSON.stringify(eval(evalMatch[1])), true);
+                await context.send(JSON.stringify(eval(evalMatch[1])));
+                return;
+            }
+            else if (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)) {
                 const result = await (await fetch("https://api.covid19api.com/summary")).json();
                 const cc = (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)[1] || "BG").toUpperCase();
                 const bg = result.Countries.find(x => x.CountryCode === cc);
@@ -301,7 +309,7 @@ class EchoBot extends ActivityHandler {
                     url_ + ": " + matched[1].replace(" - YouTube", "") :
                     url_ + ": <can't find title>";
                 await context.sendActivity(MessageFactory.text(replyText, replyText));
-                break;                
+                return;
             } else {
                 const rx = "https?:[/][/](www[.])?(m[.])?youtube[.]com[/]watch[?](.*?(&|&amp;))?v=([a-zA-Z0-9_-]+)";
                 const urls =
