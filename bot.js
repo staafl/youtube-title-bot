@@ -5,22 +5,33 @@ const { ActivityHandler, MessageFactory } = require('botbuilder');
 const http = require('https');
 const pkg = require("./package.json");
 
-function decodeEntities(encodedString) {
-    var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
-    var translate = {
-        "nbsp":" ",
-        "amp" : "&",
-        "quot": "\"",
-        "lt"  : "<",
-        "gt"  : ">"
-    };
-    return encodedString.replace(translate_re, function(match, entity) {
-        return translate[entity];
-    }).replace(/&#(\d+);/gi, function(match, numStr) {
-        var num = parseInt(numStr, 10);
-        return String.fromCharCode(num);
-    });
+var escapeChars = {
+  '¢' : 'cent',
+  '£' : 'pound',
+  '¥' : 'yen',
+  '€': 'euro',
+  '©' :'copy',
+  '®' : 'reg',
+  '<' : 'lt',
+  '>' : 'gt',
+  '"' : 'quot',
+  '&' : 'amp',
+  '\'' : '#39'
+};
+
+var regexString = '[';
+for(var key in escapeChars) {
+  regexString += key;
 }
+regexString += ']';
+
+var regex = new RegExp( regexString, 'g');
+
+function escapeHTML(str) {
+  return str.replace(regex, function(m) {
+    return '&' + escapeChars[m] + ';';
+  });
+};
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
@@ -85,7 +96,7 @@ class EchoBot extends ActivityHandler {
 //                next();
 //                return;
 //            }
-            const text = decodeEntities(context.activity.text || "");
+            const text = escapeHTML(context.activity.text || "");
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
