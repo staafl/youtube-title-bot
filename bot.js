@@ -118,6 +118,7 @@ class EchoBot extends ActivityHandler {
             await context.sendActivity(MessageFactory.text("xhere4", "xhere"));
             evalMatch = evalMatch.match(evalRegex);
             await context.sendActivity(MessageFactory.text("xhere5", "xhere"));
+            await context.sendActivity(MessageFactory.text(JSON.stringify(evalMatch), JSON.stringify(evalMatch)));
 
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
