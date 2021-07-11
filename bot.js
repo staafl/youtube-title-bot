@@ -5,6 +5,23 @@ const { ActivityHandler, MessageFactory } = require('botbuilder');
 const http = require('https');
 const pkg = require("./package.json");
 
+function decodeEntities(encodedString) {
+    var translate_re = /&(nbsp|amp|quot|lt|gt);/g;
+    var translate = {
+        "nbsp":" ",
+        "amp" : "&",
+        "quot": "\"",
+        "lt"  : "<",
+        "gt"  : ">"
+    };
+    return encodedString.replace(translate_re, function(match, entity) {
+        return translate[entity];
+    }).replace(/&#(\d+);/gi, function(match, numStr) {
+        var num = parseInt(numStr, 10);
+        return String.fromCharCode(num);
+    });
+}
+
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 function getHost(url) {
@@ -68,16 +85,16 @@ class EchoBot extends ActivityHandler {
 //                next();
 //                return;
 //            }
-            const text = context.activity.text || "";
+            const text = decodeEntities(context.activity.text || "");
             //console.log(JSON.stringify(Object.keys(context.activity)));
             //console.log(JSON.stringify(context.activity));
             try {
 
-                const maxPlayers = 20;
+            const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-                            let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/s;
-                let evalMatch = text.replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
+            let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/s;
+            let evalMatch = text.replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
@@ -96,7 +113,7 @@ class EchoBot extends ActivityHandler {
                     toPrint = new Date().toISOString().substring(0,10) + " New Cases " + cc + ": " + numberWithCommas(bg.NewConfirmed) + ", Total: " + numberWithCommas(bg.TotalConfirmed);
                 }
                 await context.sendActivity(MessageFactory.text(toPrint, toPrint));
-                
+
             } else if (text.match(/\btennis42 ranking\b/i)) {
                 const user = text.match(/\btennis42 ranking\b/i)[1];
                 const doc = new GoogleSpreadsheet('1tnQpc_0Seq2ukjxVLBoiJ1ejcVL9bBP5auFUq5op_Kw');
