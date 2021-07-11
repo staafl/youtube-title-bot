@@ -76,7 +76,7 @@ class EchoBot extends ActivityHandler {
                 const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-                            let evalRegex = /(?:^|tick42-bot *(?:<[/]at>)?) *eval\b (.+)/s;
+                            let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/s;
                 let evalMatch = text.replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
