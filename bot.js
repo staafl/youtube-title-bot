@@ -105,19 +105,13 @@ class EchoBot extends ActivityHandler {
             const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/sm;
+            let evalRegex = /\beval\b (.+)/sm;
 
-            await context.sendActivity(MessageFactory.text("xhere", "xhere"));
             let evalMatch = (escapeHTML(text)||"");
-            await context.sendActivity(MessageFactory.text("xhere1", "xhere"));
             evalMatch = evalMatch.replace(/\n/g, "");
-            await context.sendActivity(MessageFactory.text("xhere2", "xhere"));
             evalMatch = evalMatch.replace(/\r/g, "");
-            await context.sendActivity(MessageFactory.text("xhere3", "xhere"));
             evalMatch = evalMatch.trim();
-            await context.sendActivity(MessageFactory.text("xhere4", "xhere"));
             evalMatch = evalMatch.match(evalRegex);
-            await context.sendActivity(MessageFactory.text("xhere5", "xhere"));
             await context.sendActivity(MessageFactory.text(JSON.stringify(evalMatch), JSON.stringify(evalMatch)));
 
             if (evalMatch) {
