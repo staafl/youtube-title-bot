@@ -1,6 +1,6 @@
 {
     "name": "youtube-video-title",
-    "version": "0.0.126",
+    "version": "0.0.127",
     "description": "When a YouTube video link is posted, fetch video title and information.",
     "author": "Generated using Microsoft Bot Builder Yeoman generator v4.9.0",
     "license": "MIT",
