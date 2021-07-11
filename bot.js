@@ -106,14 +106,23 @@ class EchoBot extends ActivityHandler {
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
             let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/sm;
+            
+                await context.sendActivity(MessageFactory.text("here", "here"));
             let evalMatch = escapeHTML(text).replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
+                await context.sendActivity(MessageFactory.text("there", "there"));
                 let result = eval(evalMatch[1]);//.split(/\n/);
                 if (typeof result === "object") {
                     result = JSON.stringify(result)
                 }
+/*
+{code}
+eval ["  /\\ ___ /\\", " (  o   o  )", "  \\  >#<  /", "  /       \\", " /         \\       ^", "|           |     //", " \\         /    //", "  ///  ///   --"].join("\n")
+{code}
+*/
+                await context.sendActivity(MessageFactory.text("where", "where"));
                 await context.sendActivity(MessageFactory.text(result + "", result + ""));
                 return;
             }
