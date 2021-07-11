@@ -110,9 +110,11 @@ class EchoBot extends ActivityHandler {
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
-                for (const line of JSON.stringify(eval(evalMatch[1])).split(/\n/)) {;
-                    await context.sendActivity(MessageFactory.text(line, line));
+                let result = eval(evalMatch[1]).split(/\n/);
+                if (typeof result === "object") {
+                    result = JSON.stringify(result)
                 }
+                await context.sendActivity(MessageFactory.text(result + "", result + ""));
                 return;
             }
             else if (text.match(/\bcovid\b *(\b[a-z][a-z]\b)?/i)) {
