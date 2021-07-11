@@ -6,30 +6,30 @@ const http = require('https');
 const pkg = require("./package.json");
 
 var escapeChars = {
-  '¢' : 'cent',
-  '£' : 'pound',
-  '¥' : 'yen',
-  '€': 'euro',
-  '©' :'copy',
-  '®' : 'reg',
-  '<' : 'lt',
-  '>' : 'gt',
-  '"' : 'quot',
-  '&' : 'amp',
-  '\'' : '#39'
+  'cent': '¢',
+  'pound': '£',
+  'yen': '¥',
+  'euro': '€',
+  'copy' :'©',
+  'reg': '®',
+  'lt': '<',
+  'gt': '>',
+  'quot': '"',
+  'amp': '&',
+  '#39': '\''
 };
 
-var regexString = '[';
+var regexString = '';
 for(var key in escapeChars) {
-  regexString += key;
+  regexString += "&" + key + ";|";
 }
-regexString += ']';
+regexString=regexString.replace(/[|]$/, "");
 
 var regex = new RegExp( regexString, 'g');
 
 function escapeHTML(str) {
   return str.replace(regex, function(m) {
-    return '&' + escapeChars[m] + ';';
+    return escapeChars[m.replace(/&|;/g, "")] || "";
   });
 };
 
