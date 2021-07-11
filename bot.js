@@ -30,8 +30,8 @@ var regex = new RegExp( regexString, 'g');
 
 function escapeHTML(str) {
   return str.replace(regex, function(m) {
-    return escapeChars[m.replace(/&|;/g, "")] || "";
-  }).replace(/<br[/]?>/g, "");
+    return escapeChars[(m||"").replace(/&|;/g, "")] || "";
+  }).replace(/<br[/]?>/g, "") || "";
 };
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
