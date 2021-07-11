@@ -30,7 +30,7 @@ var regex = new RegExp( regexString, 'g');
 function escapeHTML(str) {
   return str.replace(regex, function(m) {
     return escapeChars[m.replace(/&|;/g, "")] || "";
-  });
+  }).replace(/<br[/]?>/g, "");
 };
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
@@ -104,7 +104,7 @@ class EchoBot extends ActivityHandler {
             const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/s;
+            let evalRegex = /(?:^|bot *(?:<[/]at>)?) *eval\b (.+)/sm;
             let evalMatch = text.replace(/\n/g, "").replace(/\r/g, "").trim().match(evalRegex);
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
