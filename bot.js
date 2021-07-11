@@ -16,6 +16,7 @@ var escapeChars = {
   'gt': '>',
   'quot': '"',
   'amp': '&',
+  'apos': '\'',
   '#39': '\''
 };
 
