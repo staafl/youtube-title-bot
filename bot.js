@@ -116,7 +116,15 @@ class EchoBot extends ActivityHandler {
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
-                let result = eval(evalMatch[1]);//.split(/\n/);
+                let result;
+                try {
+                    result = eval(evalMatch[1]);//.split(/\n/);
+                } catch (err) {
+                await context.sendActivity(MessageFactory.text("Error: " + err.message, "Error: " + err.message));
+                await context.sendActivity(MessageFactory.text("Try wrapping code in code blocks, e.g. eval {code}1+2{code}","Try wrapping code in code blocks, e.g. eval {code}1+2{code}"));
+                    return;
+                }
+                
                 if (typeof result === "object") {
                     result = JSON.stringify(result)
                 }
