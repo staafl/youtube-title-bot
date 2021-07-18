@@ -116,15 +116,18 @@ class EchoBot extends ActivityHandler {
             if (evalMatch) {
                 //await context.send(evalMatch[1], true);
                 //await context.send(JSON.stringify(eval(evalMatch[1])), true);
+
                 let result;
                 try {
-                    result = eval(evalMatch[1]);//.split(/\n/);
+                    // let require = (getGlobal() || {}).require;
+                    (getGlobal() || {}).require = null;
+                    result = ~evalMatch[1].indexOf("require") ? "Nice try, you monster." : eval(evalMatch[1]);
                 } catch (err) {
                 await context.sendActivity(MessageFactory.text("Error: " + err.message, "Error: " + err.message));
                 await context.sendActivity(MessageFactory.text("Try wrapping code in code blocks, e.g. eval {code}1+2{code}","Try wrapping code in code blocks, e.g. eval {code}1+2{code}"));
                     return;
                 }
-                
+
                 if (typeof result === "object") {
                     result = JSON.stringify(result)
                 }
@@ -432,6 +435,10 @@ eval ["  /\\ ___ /\\", " (  o   o  )", "  \\  >#<  /", "  /       \\", " /      
 //            await next();
 //        });
     }
+}
+
+function getGlobal() {
+    return this;
 }
 
 module.exports.EchoBot = EchoBot;
