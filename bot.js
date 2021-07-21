@@ -331,9 +331,9 @@ eval ["  /\\ ___ /\\", " (  o   o  )", "  \\  >#<  /", "  /       \\", " /      
 
                 const toTell = result.user.name + ": " + (result.full_text || result.text);
                 await context.sendActivity(MessageFactory.text(toTell, toTell));
-            } else if (text.match(/\btitle /i)) {
+            } else if (text.match(/\bget-title /i)) {
                 let reply = "";
-                const url = text.match(/https?.*/);
+                const url = (text.match(/https?.*/) || [])[0];
                 await context.sendActivity(MessageFactory.text(getHost(url) + " " + getPath(url), getHost(url) + " " + getPath(url)));
                 await new Promise((rs) => {
                     var callback = function(res) {
