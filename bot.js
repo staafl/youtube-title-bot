@@ -334,8 +334,8 @@ eval ["  /\\ ___ /\\", " (  o   o  )", "  \\  >#<  /", "  /       \\", " /      
             } else if (text.match(/\bget-title /i)) {
                 let reply = "";
                 const url = (text.match(/https?.*/) || [])[0];
-                await context.sendActivity(MessageFactory.text(url, url));
-                await context.sendActivity(MessageFactory.text(getHost(url) + " " + getPath(url), getHost(url) + " " + getPath(url)));
+                //await context.sendActivity(MessageFactory.text(url, url));
+                //await context.sendActivity(MessageFactory.text(getHost(url) + " " + getPath(url), getHost(url) + " " + getPath(url)));
                 await new Promise((rs) => {
                     var callback = function(res) {
                       //console.log(`STATUS: ${res.statusCode}`);
