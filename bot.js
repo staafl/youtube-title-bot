@@ -105,7 +105,7 @@ class EchoBot extends ActivityHandler {
             const maxPlayers = 20;
             //console.log(context.activity.conversation.tenantId);
             const from = context.activity.from.name.replace(/ .*/, "");
-            let evalRegex = /\beval\b (.+)/sm;
+            let evalRegex = /\beval\b(.+)/sm;
 
             let evalMatch = (escapeHTML(text)||"");
             evalMatch = evalMatch.replace(/\n/g, "");
